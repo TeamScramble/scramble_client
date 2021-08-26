@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face{
+  font-family: "CookieRun";
+  font-weight: normal;
+  src: url("./fonts/CookieRunRegular.ttf")
+}
+
+@font-face{
+  font-family: "CookieRun";
+  font-weight: 700;
+  src: url("./fonts/CookieRunBold.ttf")
+}
