@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import logo from './scramble_logo2.png';
+import logo from 'public/images/scramble_logo2.png';
+import { UserContext, PageContext, SocketContext } from 'context';
+import { withRouter } from 'react-router-dom';
 
 const Wrapper = styled.div`
   padding: 100px 0 0 0;
@@ -14,7 +16,9 @@ const LogoContainer = styled.div``;
 
 const Image = styled.img`
   height: 100px;
-  object-fit: cover;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -50,16 +54,56 @@ const PlayButton = styled.button`
   }
 `;
 
-const Main = () => {
-  const [nickname, setNickname] = useState('');
+const Main = withRouter(({ location }) => {
+  const { nickname, dispatchNickname, dispatchRoomId, dispatchUserId } =
+    useContext(UserContext);
+  const { currentPage, dispatchCurrentPage } = useContext(PageContext);
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    dispatchUserId(socket.id);
+
+    socket.on('create success', data => {
+      console.log('data.room_id', data.room_id);
+      dispatchCurrentPage('waitingRoom');
+      dispatchRoomId(data.room_id);
+    });
+
+    socket.on('join fail', data => {
+      console.log('join fail');
+      console.log('message', data.message);
+    });
+
+    socket.on('join success', data => {
+      console.log('join success');
+
+      dispatchCurrentPage('waitingRoom');
+    });
+  }, []);
 
   const handleNickname = e => {
-    setNickname(e.target.value);
+    dispatchNickname(e.target.value);
+    console.log('nickname', nickname);
   };
 
-  const handlePlay = e => {
-    console.log('hi');
-  };
+  const handlePlay = useCallback(() => {
+    if (!location.search) {
+      socket.emit('create room', { nickname: nickname }, error => {
+        if (error) {
+          console.log('error', error);
+        }
+      });
+    } else {
+      const params = new URLSearchParams(location.search);
+      const roomId = params.get('room_id');
+
+      socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
+        if (error) {
+          console.log('error', error);
+        }
+      });
+    }
+  }, [nickname]);
 
   return (
     <Wrapper>
@@ -67,14 +111,13 @@ const Main = () => {
         <Image src={logo} alt="스크램블 로고" />
       </LogoContainer>
       <InputContainer>
-        <NicknameInput
-          placeholder="닉네임을 입력해주세요"
-          onChange={handleNickname}
-        />
-        <PlayButton onClick={handlePlay}>PLAY !</PlayButton>
+        <NicknameInput placeholder={`닉네임을 입력해주세요`} onChange={handleNickname} />
+        <PlayButton onClick={handlePlay} disabled={!nickname}>
+          PLAY !
+        </PlayButton>
       </InputContainer>
     </Wrapper>
   );
-};
+});
 
 export default Main;

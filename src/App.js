@@ -1,7 +1,17 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
 import Main from 'components/main/Main';
+import WaitingRoom from 'components/waitingRoom/WaitingRoom';
 import styled from 'styled-components';
+import Router from 'components/router';
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+
+import ContextProvider, {
+  UserContextProvider,
+  PageContextProvider,
+  PageContext,
+  SocketContextProvider,
+} from 'context';
+
 import { Reset } from 'styled-reset';
 
 const MainWrapper = styled.main`
@@ -13,14 +23,26 @@ const MainWrapper = styled.main`
 `;
 
 const App = () => {
-  return (
-    <React.Fragment>
-      <Reset />
+  const { currentPage, dispatchCurrentPage } = useContext(PageContext);
 
-      <MainWrapper>
-        <Main />
-      </MainWrapper>
-    </React.Fragment>
+  useEffect(() => {
+    console.log('currentPage', currentPage);
+  }, []);
+  return (
+    <ContextProvider
+      contexts={[
+        UserContextProvider,
+        PageContextProvider,
+        SocketContextProvider,
+      ]}
+    >
+      <BrowserRouter>
+        <Reset />
+        <MainWrapper>
+          <Router currentPage={currentPage} />
+        </MainWrapper>
+      </BrowserRouter>
+    </ContextProvider>
   );
 };
 
