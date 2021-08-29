@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { io } from 'socket.io-client';
-import { UserContext, PageContext, SocketContext, PageContextProvider } from 'context';
-import InvalidAccess from './InvalidAccess';
+import { UserContext, PageContext, SocketContext, GameContext } from 'context';
+import { CopyArea } from 'components/helpers';
 import logo from 'public/images/scramble_logo2.png';
+import WaitingUsers from './WaitingUsers';
 
 const ROUND_RANGE = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -14,13 +14,16 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   .title {
+    margin: 30px 0 0 0;
+    font-weight: 700;
     font-size: 25px;
   }
 `;
 
 const ContentWrapper = styled.div`
+  margin: 30px 0 0 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 `;
 
@@ -32,11 +35,11 @@ const LeftContainer = styled.div`
 `;
 const RightContainer = styled.div`
   margin: 0 0 0 30px;
-  background-color: tomato;
   display: flex;
+  align-items: flex-start;
+
   width: 100vw;
   max-width: 500px;
-  height: 300px;
   .user {
     display: flex;
     align-items: center;
@@ -62,7 +65,6 @@ const Image = styled.img`
 `;
 
 const RoomInfoWrapper = styled.div`
-  margin: 30px 0 0 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,7 +83,7 @@ const RoomInfoContainer = styled.div`
   max-width: 500px;
   box-sizing: border-box;
   border-radius: 4px;
-  box-shadow: 1px 1px 5px #00000020;
+  border: 1px solid #ddd;
 `;
 
 const SelectorContainer = styled.div`
@@ -104,6 +106,7 @@ const Option = styled.option`
 `;
 
 const PlayButton = styled.button`
+  margin: 20px 0 0 0;
   width: 100vw;
   max-width: 500px;
   padding: 15px 20px;
@@ -117,38 +120,51 @@ const PlayButton = styled.button`
   font-weight: 700;
 
   &:hover {
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? 'default' : 'pointer')};
   }
   &:active {
     background-color: #ccf6c899;
   }
 `;
 
+const CopyContainer = styled.div`
+  margin: 30px 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border: 1px solid #ddd;
+
+  .url {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 50px;
+    height: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+  }
+`;
+
 const WaitingRoom = () => {
-  const { nickname, dispatchNickname, roomId, userId } = useContext(UserContext);
+  const { nickname, dispatchNickname, roomId } = useContext(UserContext);
   const { dispatchCurrentPage } = useContext(PageContext);
   const socket = useContext(SocketContext);
+  const { userList, dispatchUserList } = useContext(GameContext);
   const [round, setRound] = useState(2);
-  const [userNicknameList, setUserNicknameList] = useState([]);
-  const [userIdList, setUserIdList] = useState([]);
 
   const handleRoundSelect = e => {
     setRound(e.target.value);
   };
 
-  const isRoomOwner = userId => {
-    return !userIdList[0] === socket.id;
-  };
-
   useEffect(() => {
-    socket.on('start success', data => {
-      console.log('message', data.message);
-      dispatchCurrentPage('gameRoom');
-    });
-
     socket.on('update user', data => {
-      setUserNicknameList(data.nicknames);
-      setUserIdList(data.users);
+      dispatchUserList(data.users);
+      console.log('update user', data.users);
+    });
+    socket.on('start success', data => {
+      dispatchUserList(data.users);
+      dispatchCurrentPage('gameRoom');
     });
   }, []);
 
@@ -158,12 +174,13 @@ const WaitingRoom = () => {
         console.log('error', error);
       }
     });
+    dispatchCurrentPage('gameRoom');
   }, [round]);
 
   return (
     <Wrapper>
       <Image src={logo} alt="스크램블 로고" />
-      <div className="title">'{nickname}'님의 방 정보 설정</div>
+      <div className="title">'{userList[0]?.nickname}'님의 방</div>
 
       <ContentWrapper>
         <LeftContainer>
@@ -183,17 +200,18 @@ const WaitingRoom = () => {
               </SelectorContainer>
             </RoomInfoContainer>
           </RoomInfoWrapper>
-          <PlayButton onClick={handleClickPlay} disabled={!(userIdList[0] === socket.id)}>
+          <PlayButton
+            onClick={handleClickPlay}
+            disabled={userList[0] && !(userList[0].id === socket.id)}
+          >
             PLAY !
           </PlayButton>
         </LeftContainer>
         <RightContainer>
-          {userNicknameList.map(item => {
-            return <div className="user">{item}</div>;
-          })}
+          <WaitingUsers users={userList} />
         </RightContainer>
       </ContentWrapper>
-      <div>URL:{`localhost:3000/?room_id=${roomId}`}</div>
+      <CopyArea text={`localhost:3000/?room_id=${roomId}`} />
     </Wrapper>
   );
 };

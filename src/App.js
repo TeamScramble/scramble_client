@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import Main from 'components/main/Main';
-import WaitingRoom from 'components/waitingRoom/WaitingRoom';
+import Main from 'components/pages/main/Main';
+import WaitingRoom from 'components/pages/waitingRoom/WaitingRoom';
 import styled from 'styled-components';
 import Router from 'components/router';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
@@ -10,6 +10,7 @@ import ContextProvider, {
   PageContextProvider,
   PageContext,
   SocketContextProvider,
+  GameContextProvider,
 } from 'context';
 
 import { Reset } from 'styled-reset';
@@ -25,15 +26,13 @@ const MainWrapper = styled.main`
 const App = () => {
   const { currentPage, dispatchCurrentPage } = useContext(PageContext);
 
-  useEffect(() => {
-    console.log('currentPage', currentPage);
-  }, []);
   return (
     <ContextProvider
       contexts={[
         UserContextProvider,
         PageContextProvider,
         SocketContextProvider,
+        GameContextProvider,
       ]}
     >
       <BrowserRouter>
