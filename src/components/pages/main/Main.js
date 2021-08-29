@@ -50,19 +50,16 @@ const PlayButton = styled.button`
   font-family: 'CookieRun';
   font-weight: 700;
   &:hover {
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? 'default' : 'pointer')};
   }
 `;
 
 const Main = withRouter(({ location }) => {
-  const { nickname, dispatchNickname, dispatchRoomId, dispatchUserId } =
-    useContext(UserContext);
+  const { nickname, dispatchNickname, dispatchRoomId } = useContext(UserContext);
   const { currentPage, dispatchCurrentPage } = useContext(PageContext);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    dispatchUserId(socket.id);
-
     socket.on('create success', data => {
       console.log('data.room_id', data.room_id);
       dispatchCurrentPage('waitingRoom');
@@ -76,8 +73,12 @@ const Main = withRouter(({ location }) => {
 
     socket.on('join success', data => {
       console.log('join success');
-
-      dispatchCurrentPage('waitingRoom');
+      dispatchRoomId(data.room_id);
+      if (data.is_playing) {
+        dispatchCurrentPage('gameRoom');
+      } else {
+        dispatchCurrentPage('waitingRoom');
+      }
     });
   }, []);
 
