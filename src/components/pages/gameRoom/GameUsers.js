@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import crownIcon from 'public/images/crown.svg';
 import { SocketContext } from 'context';
 
-const UserWrapper = styled.div``;
+const UserWrapper = styled.div`
+  margin: 0 10px 0 0;
+  width: 190px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+`;
 
 const UserItem = styled.div`
   display: flex;
