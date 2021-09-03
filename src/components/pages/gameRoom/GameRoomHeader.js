@@ -4,16 +4,23 @@ import styled from 'styled-components';
 
 const HeaderContainer = styled.div`
   display: flex;
+  margin-right: auto;
 `;
 
 const Image = styled.img`
-  height: 100px;
+  height: 60px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const GameRoomHeader = () => {
+  const handleClickLogo = () => {
+    window.location.reload();
+  };
   return (
     <HeaderContainer>
-      <Image src={logo} alt="스크램블 로고" />
+      <Image src={logo} alt="스크램블 로고" onClick={handleClickLogo} />
     </HeaderContainer>
   );
 };

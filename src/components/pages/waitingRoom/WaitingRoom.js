@@ -177,9 +177,13 @@ const WaitingRoom = () => {
     dispatchCurrentPage('gameRoom');
   }, [round]);
 
+  const handleClickLogo = () => {
+    window.location.reload();
+  };
+
   return (
     <Wrapper>
-      <Image src={logo} alt="스크램블 로고" />
+      <Image src={logo} alt="스크램블 로고" onClick={handleClickLogo} />
       <div className="title">'{userList[0]?.nickname}'님의 방</div>
 
       <ContentWrapper>

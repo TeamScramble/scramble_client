@@ -106,10 +106,14 @@ const Main = withRouter(({ location }) => {
     }
   }, [nickname]);
 
+  const handleClickLogo = () => {
+    window.location.reload();
+  };
+
   return (
     <Wrapper>
       <LogoContainer>
-        <Image src={logo} alt="스크램블 로고" />
+        <Image src={logo} alt="스크램블 로고" onClick={handleClickLogo} />
       </LogoContainer>
       <InputContainer>
         <NicknameInput placeholder={`닉네임을 입력해주세요`} onChange={handleNickname} />

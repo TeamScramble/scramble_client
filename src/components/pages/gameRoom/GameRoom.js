@@ -3,10 +3,13 @@ import { SocketContext, GameContext, UserContext } from 'context';
 import styled from 'styled-components';
 import { CopyArea } from 'components/helpers';
 import GameRoomHeader from './GameRoomHeader';
-import Chat from './Chat/Chat';
+import Chat from './Chat';
+import WhiteBoard from './WhiteBoard';
 import GameUsers from './GameUsers';
 
 const Wrapper = styled.div`
+  width: 1200px;
+  margin: 0 auto;
   padding: 50px 0 0 0;
   display: flex;
   flex-direction: column;
@@ -15,8 +18,9 @@ const Wrapper = styled.div`
 `;
 
 const GameContentWrapper = styled.div`
+  margin: 20px 0 80px 0;
   height: 600px;
-  background-color: #fff;
+
   display: flex;
 `;
 
@@ -37,6 +41,7 @@ const GameRoom = () => {
 
       <GameContentWrapper>
         <GameUsers userList={userList} />
+        <WhiteBoard />
         <Chat />
       </GameContentWrapper>
       <CopyArea text={`localhost:3000/?room_id=${roomId}`} />
