@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import logo from 'public/images/scramble_logo2.png';
 import { UserContext, PageContext, SocketContext } from 'context';
 import { withRouter } from 'react-router-dom';
+import Loading from 'components/common/Loading';
 
 const Wrapper = styled.div`
   padding: 100px 0 0 0;
@@ -54,10 +55,15 @@ const PlayButton = styled.button`
   }
 `;
 
+const LoadingContainer = styled.div`
+  margin: 150px 0 0 0;
+`;
+
 const Main = withRouter(({ location }) => {
   const { nickname, dispatchNickname, dispatchRoomId } = useContext(UserContext);
   const { currentPage, dispatchCurrentPage } = useContext(PageContext);
   const socket = useContext(SocketContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     socket.on('create success', data => {
@@ -88,21 +94,37 @@ const Main = withRouter(({ location }) => {
   };
 
   const handlePlay = useCallback(() => {
+    setLoading(true);
+
     if (!location.search) {
-      socket.emit('create room', { nickname: nickname }, error => {
-        if (error) {
-          console.log('error', error);
-        }
-      });
+      setTimeout(function () {
+        socket.emit('create room', { nickname: nickname }, error => {
+          if (error) {
+            console.log('join room error', error);
+          }
+        });
+      }, 2000);
+      // socket.emit('create room', { nickname: nickname }, error => {
+      //   if (error) {
+      //     console.log('error', error);
+      //   }
+      // });
     } else {
       const params = new URLSearchParams(location.search);
       const roomId = params.get('room_id');
-
-      socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
-        if (error) {
-          console.log('error', error);
-        }
-      });
+      setTimeout(
+        socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
+          if (error) {
+            console.log('join room error', error);
+          }
+        }),
+        2000,
+      );
+      // socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
+      //   if (error) {
+      //     console.log('error', error);
+      //   }
+      // });
     }
   }, [nickname]);
 
@@ -115,12 +137,21 @@ const Main = withRouter(({ location }) => {
       <LogoContainer>
         <Image src={logo} alt="스크램블 로고" onClick={handleClickLogo} />
       </LogoContainer>
-      <InputContainer>
-        <NicknameInput placeholder={`닉네임을 입력해주세요`} onChange={handleNickname} />
-        <PlayButton onClick={handlePlay} disabled={!nickname}>
-          PLAY !
-        </PlayButton>
-      </InputContainer>
+      {loading ? (
+        <LoadingContainer>
+          <Loading color="#ddd" loadingString="Enter Room" />
+        </LoadingContainer>
+      ) : (
+        <InputContainer>
+          <NicknameInput
+            placeholder={`닉네임을 입력해주세요`}
+            onChange={handleNickname}
+          />
+          <PlayButton onClick={handlePlay} disabled={!nickname}>
+            PLAY !
+          </PlayButton>
+        </InputContainer>
+      )}
     </Wrapper>
   );
 });
