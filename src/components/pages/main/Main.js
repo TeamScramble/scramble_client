@@ -97,34 +97,19 @@ const Main = withRouter(({ location }) => {
     setLoading(true);
 
     if (!location.search) {
-      setTimeout(function () {
-        socket.emit('create room', { nickname: nickname }, error => {
-          if (error) {
-            console.log('join room error', error);
-          }
-        });
-      }, 2000);
-      // socket.emit('create room', { nickname: nickname }, error => {
-      //   if (error) {
-      //     console.log('error', error);
-      //   }
-      // });
+      socket.emit('create room', { nickname: nickname }, error => {
+        if (error) {
+          console.log('error', error);
+        }
+      });
     } else {
       const params = new URLSearchParams(location.search);
       const roomId = params.get('room_id');
-      setTimeout(
-        socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
-          if (error) {
-            console.log('join room error', error);
-          }
-        }),
-        2000,
-      );
-      // socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
-      //   if (error) {
-      //     console.log('error', error);
-      //   }
-      // });
+      socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
+        if (error) {
+          console.log('error', error);
+        }
+      });
     }
   }, [nickname]);
 
