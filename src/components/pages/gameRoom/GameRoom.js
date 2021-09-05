@@ -27,20 +27,13 @@ const GameContentWrapper = styled.div`
 const GameRoom = () => {
   const socket = useContext(SocketContext);
   const { roomId } = useContext(UserContext);
-  const { userList, dispatchUserList } = useContext(GameContext);
-
-  useEffect(() => {
-    socket.on('update user', data => {
-      dispatchUserList(data.users);
-    });
-  }, []);
 
   return (
     <Wrapper>
       <GameRoomHeader />
 
       <GameContentWrapper>
-        <GameUsers userList={userList} />
+        <GameUsers />
         <WhiteBoard />
         <Chat />
       </GameContentWrapper>

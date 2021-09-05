@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import crownIcon from 'public/images/crown.svg';
-import { SocketContext } from 'context';
+import { SocketContext, GameContext } from 'context';
 
 const UserWrapper = styled.div`
   margin: 0 10px 0 0;
@@ -24,8 +24,10 @@ const Icon = styled.img`
   margin: 0 5px 0 0;
 `;
 
-const Users = ({ userList }) => {
+const Users = () => {
   const socket = useContext(SocketContext);
+  const { userList, dispatchUserList, questioner, dispatchQuestioner } =
+    useContext(GameContext);
 
   return (
     <UserWrapper>
@@ -36,6 +38,8 @@ const Users = ({ userList }) => {
             <div>
               {item.nickname}
               <span className="me">{item.id === socket.id && ' (나)'}</span>
+              <span className="me">{questioner.id === item.id && ' 출제자'}</span>
+              <span className="me">'점수': {item.score}</span>
             </div>
           </UserItem>
         );
