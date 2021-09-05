@@ -8,6 +8,8 @@ const defaultUserInfo = {
   dispatchRoomId: () => {},
   userId: '',
   dispatchUserId: () => {},
+  isSoved: false,
+  dispatchIsSolved: () => {},
 };
 
 export const UserContext = createContext(defaultUserInfo);
@@ -16,6 +18,7 @@ export const UserContextProvider = ({ children }) => {
   const [nickname, setNickname] = useState(generateName());
   const [roomId, setRoomId] = useState('');
   const [userId, setUserId] = useState('');
+  const [isSolved, setIsSolved] = useState(false);
 
   const dispatchNickname = nickname => {
     setNickname(nickname);
@@ -25,6 +28,9 @@ export const UserContextProvider = ({ children }) => {
   };
   const dispatchUserId = id => {
     setUserId(id);
+  };
+  const dispatchIsSolved = status => {
+    setIsSolved(status);
   };
 
   return (
@@ -36,6 +42,8 @@ export const UserContextProvider = ({ children }) => {
         dispatchRoomId,
         userId,
         dispatchUserId,
+        isSolved,
+        dispatchIsSolved,
       }}
     >
       {children}
