@@ -158,20 +158,22 @@ const WaitingRoom = () => {
   };
 
   useEffect(() => {
-    socket.on('update user', data => {
+    socket.on('update user list', data => {
       dispatchUserList(data.users);
-      console.log('update user', data.users);
     });
-    socket.on('start success', data => {
+    socket.on('start round', data => {
       dispatchUserList(data.users);
       dispatchCurrentPage('gameRoom');
+      if (data.users[0].id === socket.id) {
+        socket.emit('ready set', {});
+      }
     });
   }, []);
 
   const handleClickPlay = useCallback(() => {
     socket.emit('start game', { round: round }, error => {
       if (error) {
-        console.log('error', error);
+        alert('게임 시작 오류!', error);
       }
     });
     dispatchCurrentPage('gameRoom');
@@ -206,7 +208,9 @@ const WaitingRoom = () => {
           </RoomInfoWrapper>
           <PlayButton
             onClick={handleClickPlay}
-            disabled={userList[0] && !(userList[0].id === socket.id)}
+            disabled={
+              (userList[0] && !(userList[0].id === socket.id)) || userList.length === 1
+            }
           >
             PLAY !
           </PlayButton>
