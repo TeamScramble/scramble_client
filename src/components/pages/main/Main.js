@@ -67,18 +67,15 @@ const Main = withRouter(({ location }) => {
 
   useEffect(() => {
     socket.on('create success', data => {
-      console.log('data.room_id', data.room_id);
       dispatchCurrentPage('waitingRoom');
       dispatchRoomId(data.room_id);
     });
 
     socket.on('join fail', data => {
-      console.log('join fail');
-      console.log('message', data.message);
+      alert('방 입장에 실패했습니다. ', data.message);
     });
 
     socket.on('join success', data => {
-      console.log('join success');
       dispatchRoomId(data.room_id);
       if (data.is_playing) {
         dispatchCurrentPage('gameRoom');
@@ -90,7 +87,6 @@ const Main = withRouter(({ location }) => {
 
   const handleNickname = e => {
     dispatchNickname(e.target.value);
-    console.log('nickname', nickname);
   };
 
   const handlePlay = useCallback(() => {
@@ -99,7 +95,7 @@ const Main = withRouter(({ location }) => {
     if (!location.search) {
       socket.emit('create room', { nickname: nickname }, error => {
         if (error) {
-          console.log('error', error);
+          alert('방 생성 오류!', error);
         }
       });
     } else {
@@ -107,7 +103,7 @@ const Main = withRouter(({ location }) => {
       const roomId = params.get('room_id');
       socket.emit('join room', { room_id: roomId, nickname: nickname }, error => {
         if (error) {
-          console.log('error', error);
+          alert('방 참가 오류!', error);
         }
       });
     }

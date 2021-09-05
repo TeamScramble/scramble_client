@@ -54,7 +54,6 @@ const Chat = () => {
       setMessageList(messageList => [...messageList, data]);
     });
     socket.on('correct answer', data => {
-      console.log('on correct answer');
       dispatchIsSolved(true);
     });
   }, []);
