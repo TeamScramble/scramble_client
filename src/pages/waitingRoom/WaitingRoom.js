@@ -5,7 +5,7 @@ import { CopyArea } from 'components/helpers';
 import logo from 'public/images/scramble_logo2.png';
 import WaitingUsers from './WaitingUsers';
 
-const ROUND_RANGE = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+const ROUND_RANGE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Wrapper = styled.div`
   padding: 100px 0 0 0;
@@ -161,7 +161,7 @@ const WaitingRoom = () => {
     socket.on('update user list', data => {
       dispatchUserList(data.users);
     });
-    socket.on('start round', data => {
+    socket.on('start game', data => {
       dispatchUserList(data.users);
       dispatchCurrentPage('gameRoom');
       if (data.users[0].id === socket.id) {

@@ -4,7 +4,7 @@ import WhiteBoardContent from './WhiteBoardContent';
 import styled from 'styled-components';
 import Foreground from './Foreground';
 import { FOREGROUND_TYPE } from 'components/helpers/constants';
-
+import Timer from 'pages/gameRoom/Timer';
 const Container = styled.div`
   border: 1px solid #ddd;
 
@@ -25,6 +25,7 @@ const WhiteBoard = () => {
 
   useEffect(() => {
     socket.on('choice word', data => {
+      console.log('choice word');
       setIsStarted(false);
       setPrevUsers(userList);
       setWords(data.words);
@@ -42,6 +43,7 @@ const WhiteBoard = () => {
 
       dispatchUserList(data.users);
       setForegroundType(FOREGROUND_TYPE.finishSet);
+      console.log('finish set!');
       setTimeout(() => {
         socket.emit('ready set', {});
       }, 5000);
@@ -50,12 +52,18 @@ const WhiteBoard = () => {
     socket.on('get time', data => {
       setTime(data.time);
     });
+
+    // 게임 종료
+    socket.on('finish game', data => {
+      setIsStarted(false);
+
+      setForegroundType(FOREGROUND_TYPE.finishGame);
+    });
   }, []);
 
   return (
     <Container>
       <WhiteBoardContent />
-      <div>time:{time}</div>
       {/**IF NOT STARTED OR NOT QUESTIONER, RENDER */}
       {(!isStarted || !(questioner.id === socket.id)) && (
         <>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { FOREGROUND_TYPE } from 'components/helpers/constants';
 
 const Container = styled.div`
+  border: 1px solid #00000000;
   width: 700px;
   height: 600px;
   background-color: ${props => (props.isStarted ? 'none' : '#999')};
@@ -121,6 +122,14 @@ const Foreground = ({
               );
             })}
           </div>
+        </FinishContainer>
+      </Container>
+    );
+  } else if (type === FOREGROUND_TYPE.finishGame) {
+    return (
+      <Container>
+        <FinishContainer>
+          <div className="title">게임종료</div>
         </FinishContainer>
       </Container>
     );

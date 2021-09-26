@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 `;
 
 const GameContentWrapper = styled.div`
-  margin: 20px 0 80px 0;
+  margin: 0 0 80px 0;
   height: 600px;
 
   display: flex;

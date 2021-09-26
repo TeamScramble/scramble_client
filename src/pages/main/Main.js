@@ -93,11 +93,7 @@ const Main = withRouter(({ location }) => {
     setLoading(true);
 
     if (!location.search) {
-      socket.emit('create room', { nickname: nickname }, error => {
-        if (error) {
-          alert('방 생성 오류!', error);
-        }
-      });
+      socket.emit('create room', { nickname: nickname });
     } else {
       const params = new URLSearchParams(location.search);
       const roomId = params.get('room_id');

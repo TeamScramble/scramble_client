@@ -5,7 +5,7 @@ import { SocketContext, GameContext } from 'context';
 
 const UserWrapper = styled.div`
   margin: 0 10px 0 0;
-  width: 190px;
+  width: 180px;
   border: 1px solid #ddd;
   background-color: #fff;
 `;

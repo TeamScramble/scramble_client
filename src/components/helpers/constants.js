@@ -8,6 +8,7 @@ const MESSAGE_TYPE = {
 const FOREGROUND_TYPE = {
   choiceWord: 'CHOICE_WORD',
   finishSet: 'FINISH_SET',
+  finishGame: 'FINISH_GAME',
 };
 
 export { MESSAGE_TYPE, FOREGROUND_TYPE };
