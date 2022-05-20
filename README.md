@@ -1,70 +1,19 @@
-# Getting Started with Create React App
+# Team Scramble
+팀 스크램블의 웹 캐치마인드 게임 제작 프로젝트입니다. 스크램블로 친구들과 함께 창의력을 겨루어보세요!
+<div style="display: flex; flex-direction: row">
+  <div>
+    <image src="https://user-images.githubusercontent.com/40848918/169441806-4ac4cc3a-9dc6-4320-8652-de6bdf87ba2c.png" alt="2" width="700"/>
+  </div>
+</div>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 게임 설명
+- 출제자가 되어 제시된 단어를 그림으로 표현해보세요. 또 그림을 통해 제시된 단어가 무엇일지 맞춰보세요. 
+- 나만의 룰을 적용한 게임룸을 만들 수 있습니다. 링크를 공유하여 게임룸에 접속할 수 있습니다.
+- 내가 그린 그림을 실시간으로 친구들과 함께 볼 수 있습니다. 실시간 채팅으로 친구들과 소통하고, 문제를 맞출 수 있습니다.
+- 모든 라운드가 종료되면, 순위가 산정되고 다시 게임 대기실로 돌아갑니다.
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 주요 기술
+- [React.js](https://ko.reactjs.org/) : 잦은 상태변화를 빠르게 반영하고, UI를 컴포넌트 단위로 개발하기 위해 사용합니다.
+- [Socket.io](https://socket.io/) : 실시간 채팅, 그림 데이터 송수신을 위해 사용합니다.
+- [CanvasAPI](https://developer.mozilla.org/ko/docs/Web/API/Canvas_API) : 화면에 그림을 그리기 위해 사용합니다. 
+- [ContextAPI](https://ko.reactjs.org/docs/context.html) : 게임에 필요한 상태를 전역적으로 관리하기 위해 사용합니다. 
