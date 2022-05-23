@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
-import Main from 'components/pages/main/Main';
-import WaitingRoom from 'components/pages/waitingRoom/WaitingRoom';
+import Main from 'pages/main/Main';
+import WaitingRoom from 'pages/waitingRoom/WaitingRoom';
 import styled from 'styled-components';
-import Router from 'components/router';
+import Router from 'router';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 
 import ContextProvider, {

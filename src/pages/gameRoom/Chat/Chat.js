@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { SocketContext } from 'context';
+import { SocketContext, UserContext } from 'context';
 import ChatBubble from './ChatBubble';
 import ChatBar from './ChatBar';
+import { MESSAGE_TYPE } from 'components/helpers/constants';
 
 const ChatWrapper = styled.div`
   position: relative;
@@ -46,10 +47,14 @@ const Chat = () => {
   const [messageInput, setMessageInput] = useState('');
 
   const socket = useContext(SocketContext);
+  const { isSolved, dispatchIsSolved } = useContext(UserContext);
+
   useEffect(() => {
-    console.log('hi');
     socket.on('show message', data => {
       setMessageList(messageList => [...messageList, data]);
+    });
+    socket.on('correct answer', data => {
+      dispatchIsSolved(true);
     });
   }, []);
 

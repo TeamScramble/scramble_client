@@ -1,14 +1,15 @@
-import React, { useRef, useEffect, useContext } from 'react';
-import { SocketContext } from 'context';
+import React, { useRef, useEffect, useContext, useState } from 'react';
+import { SocketContext, GameContext } from 'context';
 import styled from 'styled-components';
 import { COLOR_PALETTE_ARRAY } from 'components/helpers';
 import trashLogo from 'public/images/trash.png';
+import brush from 'public/images/paint-brush.png';
 
 const BoardWrapper = styled.div`
-  border: 1px solid #ddd;
   background-color: #fff;
-  margin: 0 10px 0 0;
-  width: 690px;
+  border: 1px solid #ddd;
+
+  width: 700px;
   height: 600px;
   position: relative;
   .whiteboard {
@@ -16,13 +17,19 @@ const BoardWrapper = styled.div`
     height: 100%;
     position: relative;
   }
+
+  &:hover {
+    cursor: url(${brush}), pointer;
+  }
 `;
 
 const PaintToolContainer = styled.div`
+  display: ${props => (props.isQuestioner ? 'flex' : 'none')};
   position: absolute;
   bottom: -50px;
+  background-color: white;
+  width: 100%;
 
-  display: flex;
   .colors {
     width: 315px;
   }
@@ -41,7 +48,7 @@ const PaintToolContainer = styled.div`
   #trashcan {
     height: 35px;
     &:hover {
-      cursor: pointer;
+      cursor: ${props => (props.isQuestioner ? 'pointer' : 'default')};
     }
     &:active {
       transform: scale(0.96);
@@ -51,6 +58,7 @@ const PaintToolContainer = styled.div`
 
 const WhiteBoard = () => {
   const socket = useContext(SocketContext);
+  const { questioner } = useContext(GameContext);
 
   const canvasRef = useRef(null);
   const colorsRef = useRef(null);
@@ -88,7 +96,6 @@ const WhiteBoard = () => {
     // ------------------------------- create the drawing ----------------------------
 
     const drawLine = (x0, y0, x1, y1, color, width, emit) => {
-      console.log('x0', x0, 'y0', y0);
       context.beginPath();
       context.moveTo(x0, y0);
       context.lineTo(x1, y1);
@@ -175,9 +182,7 @@ const WhiteBoard = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
       socket.emit('clear board');
     };
-
     clearBoard.addEventListener('click', handleClearBoard);
-
     socket.on('clear board', data => {
       context.clearRect(0, 0, canvas.width, canvas.height);
     });
@@ -186,7 +191,8 @@ const WhiteBoard = () => {
   return (
     <BoardWrapper>
       <canvas ref={canvasRef} className="whiteboard" />
-      <PaintToolContainer>
+
+      <PaintToolContainer isQuestioner={socket.id === questioner.id}>
         <div ref={colorsRef} className="colors">
           {COLOR_PALETTE_ARRAY.map((item, index) => {
             return <div key={item} className="color" style={{ backgroundColor: item }} />;

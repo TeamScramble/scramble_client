@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 `;
 
 const GameContentWrapper = styled.div`
-  margin: 20px 0 80px 0;
+  margin: 0 0 80px 0;
   height: 600px;
 
   display: flex;
@@ -27,20 +27,13 @@ const GameContentWrapper = styled.div`
 const GameRoom = () => {
   const socket = useContext(SocketContext);
   const { roomId } = useContext(UserContext);
-  const { userList, dispatchUserList } = useContext(GameContext);
-
-  useEffect(() => {
-    socket.on('update user', data => {
-      dispatchUserList(data.users);
-    });
-  }, []);
 
   return (
     <Wrapper>
       <GameRoomHeader />
 
       <GameContentWrapper>
-        <GameUsers userList={userList} />
+        <GameUsers />
         <WhiteBoard />
         <Chat />
       </GameContentWrapper>

@@ -30,7 +30,7 @@ const HomeButton = styled.div`
 
 const InvalidAccess = () => {
   const handleClickHome = () => {
-    console.log('hi');
+    window.location.reload();
   };
   return (
     <DescriptionContainer>

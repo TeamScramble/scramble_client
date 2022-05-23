@@ -44,7 +44,7 @@ const Loading = ({ color = '#ccf6c8', loadingString = 'Loading...' }) => {
     <LoadingContainer>
       <LoadingString>
         {loadingString.split('').map(item => {
-          return <span className={item !== ' ' ? 'word' : 'space'}>{item}</span>;
+          return <span className="word">{item}</span>;
         })}
       </LoadingString>
       <PulseLoader color={color} css={loadingStyle} speedMultiplier={0.5} size={14} />
